@@ -6,7 +6,7 @@ Freebase was a large collaborative knowledge base consisting of data composed ma
 ```
 
 ## Download
-### Freebase
+### Google Dump
 You can download the dump of freebase from [this data dump](https://developers.google.com/freebase/#freebase-rdf-dumps) provided by Google. The dump size is about 22GB, and decompressing it needs additional 250GB storage space. You can decompress it by:
 ```shell
 gunzip -c freebase-rdf-latest.gz > freebase.nt
@@ -159,7 +159,7 @@ LIMIT 1
 For the complete reference, see Freebase types and relations, and [Virtuoso SPARQL service](http://virtuoso.openlinksw.com/dataspace/doc/dav/wiki/Main/VOSSparqlProtocol).
 
 
-## Map entity ID to real name
+## Map Entity ID to Real Name
 Since the entities in Freebase are alphanumeric strings or URIs, such as `m.03_dwn`, that convey little information at a glance. To convert an entity ID into its human-readable name or type, you can query the knowledge graph by:
 ```python
 from SPARQLWrapper import SPARQLWrapper, JSON
