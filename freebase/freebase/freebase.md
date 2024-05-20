@@ -133,7 +133,7 @@ You can also perform other operations through SPARQL, such as:
 ````sql
 SELECT COUNT(*) { 
   ?s ?p ?o
-};
+}
 ````
 * Get all relations of a mention.
 ````sql
@@ -157,3 +157,36 @@ LIMIT 1
 ````
 
 For the complete reference, see Freebase types and relations, and [Virtuoso SPARQL service](http://virtuoso.openlinksw.com/dataspace/doc/dav/wiki/Main/VOSSparqlProtocol).
+
+
+## Map entity ID to real name
+Since the entities in Freebase are alphanumeric strings or URIs, such as `m.03_dwn`, that convey little information at a glance. To convert an entity ID into its human-readable name or type, you can query the knowledge graph by:
+```python
+from SPARQLWrapper import SPARQLWrapper, JSON
+
+SPARQLPATH = "http://localhost:8890/sparql"
+
+sparql = SPARQLWrapper(SPARQLPATH)
+
+sparql_txt = """
+    PREFIX ns: <http://rdf.freebase.com/ns/>
+    SELECT DISTINCT ?tailEntity
+    WHERE {
+        {   
+            ?entity ns:type.object.name ?tailEntity .
+            FILTER(?entity = ns:%s)
+        }
+        UNION
+        {
+            ?entity <http://www.w3.org/2002/07/owl#sameAs> ?tailEntity .
+            FILTER(?entity = ns:%s)
+        }
+    }
+"""
+
+entity_id = 'm.03_dwn'
+sparql.setQuery(sparql_txt % (entity_id, entity_id))
+sparql.setReturnFormat(JSON)
+results = sparql.query().convert()
+print(results)
+```

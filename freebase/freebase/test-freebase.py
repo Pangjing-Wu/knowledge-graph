@@ -3,6 +3,24 @@ from SPARQLWrapper import SPARQLWrapper, JSON
 SPARQLPATH = "http://localhost:8890/sparql"
 
 sparql = SPARQLWrapper(SPARQLPATH)
+
+
+# count triples.
+sparql_txt = """
+SELECT COUNT(*) { 
+    ?s ?p ?o
+}
+"""
+sparql.setQuery(sparql_txt)
+sparql.setReturnFormat(JSON)
+results = sparql.query().convert()
+
+for binding in results['results']['bindings']:
+    for key in binding:
+        print(f"Total triples: {binding[key]['value']}")
+
+
+# find the individuals who are married to the person (ns:m.02pbp9). 
 sparql_txt = """PREFIX ns: <http://rdf.freebase.com/ns/>
     SELECT distinct ?name3
     WHERE {
@@ -18,4 +36,8 @@ sparql_txt = """PREFIX ns: <http://rdf.freebase.com/ns/>
 sparql.setQuery(sparql_txt)
 sparql.setReturnFormat(JSON)
 results = sparql.query().convert()
-print(results)
+
+print('Spouses:')
+for binding in results['results']['bindings']:
+    for key in binding:
+        print(binding[key]['value'])
